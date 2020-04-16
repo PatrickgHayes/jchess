@@ -29,8 +29,8 @@ R2 |[p] p [p] p [p] p [p] p |
 R3 |   [ ]   [ ]   [ ]   [ ]|
 R4 |[ ]   [ ]   [ ]   [ ]   |
 R5 |   [ ]   [ ]   [ ]   [ ]|
-R6 |[ ]   [ ]   [ ]   [ ]   |
-R7 | P [P] P [P] P [P] P [P]|
+R6 |[ ]   [ ] P [ ]   [ ]   |
+R7 | P [P] P [P]   [P] P [P]|
 R8 |[C] H [B] Q [K] B [H] C |
     ------------------------
 
@@ -48,6 +48,12 @@ Improvement steps:
 * redo
 * save game board
 
+For the future:
+* Pinging an AWS server
+* Communicating between two players' terminals
+* Ability to play multiple games
+* Better user interface (GUI)
+
 
 example of commands:
 * place P r1c3
@@ -63,3 +69,15 @@ place Q 5 5  _
 place q 5 5 Q
 
 
+04/16/20:
+* Changing moving and placing to support new format in addition to old format
+* Example of new format
+move QC1 u3
+move KN3 u1
+move KB1 ul3
+place p Q5
+
+* Add Parser class, abstract command class, and concrete command classes:
+
+Command c = Parser.parse(input.nextLine());
+c.execute();
