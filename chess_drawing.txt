@@ -81,3 +81,9 @@ place p Q5
 
 Command c = Parser.parse(input.nextLine());
 c.execute();
+
+04/17/20:
+* Abstract class needs to contain more common data
+* Created abstract command class and concrete command classes
+* Undo command will invoke UndoMove or UndoPlace commands via a history stack
+* Tomorrow we will write the parser class and clean up the chess board class

@@ -5,7 +5,7 @@ public class ChessBoard {
     static final int chess_board_size = 8;
 
     private final char[][] chess_board;
-    private Stack<String> history;
+    public Stack<Command> undoLog;
 
     public ChessBoard() {
         this.chess_board =  new char[][] {{'C','H','B','Q','K','B','H','C'},
@@ -39,6 +39,16 @@ public class ChessBoard {
             System.out.println("|");
         }
         System.out.println("     ------------------------ ");
+    }
+
+    public char getTilePiece(ChessTile chessTile)
+    {
+        return chess_board[chessTile.getRow()][chessTile.getCol()];
+    }
+
+    public void setTilePiece(ChessTile chessTile, char piece)
+    {
+        chess_board[chessTile.getRow()][chessTile.getCol()] = piece;
     }
 
     public char movePiece(int old_row, int old_col, int new_row, int new_col)
