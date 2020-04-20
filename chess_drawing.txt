@@ -87,3 +87,21 @@ c.execute();
 * Created abstract command class and concrete command classes
 * Undo command will invoke UndoMove or UndoPlace commands via a history stack
 * Tomorrow we will write the parser class and clean up the chess board class
+
+
+04/20/20: 
+        /\
+ |\    /  \    /|
+ | \   \  /   / |
+ |  |  \  /  |  |
+  \  \ \  / /  /
+|\__\ \\  // /__/|
+ \___--    --___/
+     /_/||\_\
+        ||
+* Finished refactoring. Finished parser and used it in the chessboard main method.
+* tested game play.
+* TODO set up build tool to easy compiling and managing class files
+* TODO add support for descriptive moves
+
+
