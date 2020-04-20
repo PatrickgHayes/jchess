@@ -15,7 +15,7 @@ public class UndoMove extends Command
 
 	public void execute()
 	{
-		char old_piece = chess_board.getTilePiece(new_tile)
+		char old_piece = chess_board.getTilePiece(new_tile);
 
 		chess_board.setTilePiece(old_tile, old_piece);
 		chess_board.setTilePiece(new_tile, original_piece);

@@ -1,7 +1,7 @@
-public class CheckMate extends Command
+public class Checkmate extends Command
 {
 
-	public CheckMate
+	public Checkmate()
 	{
 		
 	}

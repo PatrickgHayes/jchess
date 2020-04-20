@@ -7,7 +7,7 @@ public class UndoPlace extends Command
 	public UndoPlace(ChessBoard chessBoard, char piece, ChessTile tile)
 	{
 		this.chess_board = chessBoard;
-		this.piece = piece
+		this.piece = piece;
 		this.tile = tile;
 	}
 

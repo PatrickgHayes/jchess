@@ -25,6 +25,6 @@ public class Move extends Command
 	private void addToUndoLog(char original_piece)
 	{
 		UndoMove undo_move = new UndoMove(chess_board, old_tile, new_tile, original_piece);
-		chess_board.undoLog.push(this);
+		chess_board.undoLog.push(undo_move);
 	}
 }
