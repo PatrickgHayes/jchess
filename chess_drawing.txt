@@ -33,7 +33,6 @@ R6 |[ ]   [ ] P [ ]   [ ]   |
 R7 | P [P] P [P]   [P] P [P]|
 R8 |[C] H [B] Q [K] B [H] C |
     ------------------------
-
      C  C  C  C  C  C  C  C
      1  2  3  4  5  6  7  8    
 
@@ -104,4 +103,11 @@ c.execute();
 * TODO set up build tool to easy compiling and managing class files
 * TODO add support for descriptive moves
 
-
+04/21/20:
+* TODO make undo command not turn based
+* TODO player classes
+* TOFO castling
+* TODO pawn promotions
+* Possibly add rows and column labels for descriptive moves
+* Today, we finished the first half of descriptive moves by parsing descriptive notation
+* TODO parse relative move locations
