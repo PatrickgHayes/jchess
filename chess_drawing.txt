@@ -111,3 +111,24 @@ c.execute();
 * Possibly add rows and column labels for descriptive moves
 * Today, we finished the first half of descriptive moves by parsing descriptive notation
 * TODO parse relative move locations
+
+04/22/20:
+* For relative moving, the following formats will be accepted:
+
+single move: {u,d,l,r} [1-8]
+
+diagonal: {u,d,l,r} {(u,d) | (l,r)} [1-8]
+
+horse: {u,d,l,r} [1-8] {(u,d) | (l,r)} [1-8]
+
+
+System.out.println("To move specify the row an column of the piece you want to move and then the row and column of the destination");
+System.out.println("Example: move 7 1 8 1");
+
+System.out.println("To move first specify th piece you want to move by you using decriptive chess notation for example the pawn in front of your queen is q2. The pawn in front of the bishop on your queens side (queens bishop 2) would be entered qb2.");
+System.out.println("Then specify how squares youd like to move up of down followed by how many squares you'd like to move left and right");
+System.out.println("An example command all together would  move QB1 u5r5");
+
+* TODO change coordinate form to be r1c1 r1c2
+* Today we finished descriptive moves
+* TODO descriptive places

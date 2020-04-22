@@ -8,7 +8,7 @@ public class ChessTile
 	public ChessTile(int row, int col) throws Exception
 	{
 		if (row < 0 || row >= chess_board_size || col < 0 || col >= chess_board_size) {
-            throw new Exception("Not a valid location");
+            throw new Exception("Not a valid location " + "row is: " + row + " column is: " + col);
         }
 		this.row = row;
 		this.col = col;

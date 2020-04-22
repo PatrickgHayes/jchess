@@ -52,13 +52,13 @@ public class Parser {
             throw new Exception("Move requires the following format move" +
                                  " old_row old_col new_row new_col");
         }
-        int old_row = Integer.parseInt(tokens[1]) - 1;
-        int old_col = Integer.parseInt(tokens[2]) - 1;
-        int new_row = Integer.parseInt(tokens[3]) - 1;
-        int new_col = Integer.parseInt(tokens[4]) - 1;
+        int old_row = Integer.parseInt(tokens[1]);
+        int old_col = Integer.parseInt(tokens[2]);
+        int new_row = Integer.parseInt(tokens[3]);
+        int new_col = Integer.parseInt(tokens[4]);
         try {
-            ChessTile old_tile = new ChessTile(old_row, old_col);
-            ChessTile new_tile = new ChessTile(new_row, new_col);
+            ChessTile old_tile = new ChessTile(old_row-1, old_col-1);
+            ChessTile new_tile = new ChessTile(new_row-1, new_col-1);
             return new Move(chessBoard, old_tile, new_tile);
         } catch (Exception e) {
             throw e;
@@ -80,53 +80,118 @@ public class Parser {
         String descriptive_location = tokens[2];
         String descriptive_move = tokens[3];
         try {
+
+            // Get the old row and old column
             if (descriptive_location.length() == 2)
             {
                 old_col = (descriptive_location.charAt(0) == 'Q') ? 4 : 5;
-                int temp_row = (int)descriptive_location.charAt(1);
-                old_row = (player == 1) ? temp_row : chessBoard.chess_board_size - temp_row;
+                int temp_row = Integer.parseInt(String.valueOf(descriptive_location.charAt(1)));
+                old_row = (player == 1) ? temp_row : chessBoard.chess_board_size - temp_row + 1;
             }
             else
             {
-                if (descriptive_location.charAt(0) == 'Q')
-                {
-                    switch(descriptive_location.charAt(1))
-                    {
-                        case 'R':
-                            old_col = 1;
-                            break;
-                        case 'N':
-                            old_col = 2;
-                            break;
-                        case 'B':
-                            old_col = 3;
-                            break;
-                    }
-                }
-                else
-                {
-                    switch(descriptive_location.charAt(1))
-                    {
-                        case 'R':
-                            old_col = 8;
-                            break;
-                        case 'N':
-                            old_col = 7;
-                            break;
-                        case 'B':
-                            old_col = 6;
-                            break;
-                    }
-                }
-                int temp_row = (int)descriptive_location.charAt(2);
-                old_row = (player == 1) ? temp_row : chessBoard.chess_board_size - temp_row;
+                old_col = determineDescriptiveColumn(descriptive_location.charAt(0), descriptive_location.charAt(1));
+                int temp_row = Integer.parseInt(String.valueOf(descriptive_location.charAt(2)));
+                old_row = (player == 1) ? temp_row : chessBoard.chess_board_size - temp_row + 1;
             }
+
+            // Get the new row and new column
+            if (descriptive_move.length() == 2)
+            {
+                switch(descriptive_move.charAt(0))
+                {
+                    case 'u':
+                        new_row = old_row - Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                        new_col = old_col;
+                        break;
+                    case 'd':
+                        new_row = old_row + Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                        new_col = old_col;
+                        break;
+                    case 'r':
+                        new_col = old_col + Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                        new_row = old_row;
+                        break;
+                    case 'l':
+                        new_col = old_col - Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                        new_row = old_row;
+                        break;
+                }
+            }
+            else if (descriptive_move.length() == 3)
+            {
+                new_row = determineMoveRow(descriptive_move.charAt(0), Integer.parseInt(String.valueOf(descriptive_move.charAt(2))), old_row);
+                new_col = determineMoveColumn(descriptive_move.charAt(1), Integer.parseInt(String.valueOf(descriptive_move.charAt(2))), old_col);
+            }
+            else
+            {
+                new_row = determineMoveRow(descriptive_move.charAt(0), Integer.parseInt(String.valueOf(descriptive_move.charAt(1))), old_row);
+                new_col = determineMoveColumn(descriptive_move.charAt(2), Integer.parseInt(String.valueOf(descriptive_move.charAt(3))), old_col);
+            }
+
+            System.out.println(new_col);
+            System.out.println(new_row);
             
-            ChessTile old_tile = new ChessTile(old_row, old_col);
-            ChessTile new_tile = new ChessTile(new_row, new_col);
+            ChessTile old_tile = new ChessTile(old_row-1, old_col-1);
+            ChessTile new_tile = new ChessTile(new_row-1, new_col-1);
             return new Move(chessBoard, old_tile, new_tile);
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    int determineDescriptiveColumn(char side, char piece)
+    {
+        if (side == 'Q')
+        {
+            switch(piece)
+            {
+                case 'R':
+                    return 1;
+                case 'N':
+                    return 2;
+                case 'B':
+                    return 3;
+            }
+        }
+        else
+        {
+            switch(piece)
+            {
+                case 'R':
+                    return 8;
+                case 'N':
+                    return 7;
+                case 'B':
+                    return 6;
+            }
+        }
+        return 0;
+    }
+
+    int determineMoveColumn(char direction, int amount, int old_col)
+    {
+        switch(direction)
+        {
+            case 'r':
+                return old_col + amount;
+            case 'l':
+                return old_col - amount;
+            default:
+                return 0;
+        }
+    }
+
+    int determineMoveRow(char direction, int amount, int old_row)
+    {
+        switch(direction)
+        {
+            case 'u':
+                return old_row - amount;
+            case 'd':
+                return old_row + amount;
+            default:
+                return 0;
         }
     }
 }

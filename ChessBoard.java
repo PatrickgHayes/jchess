@@ -9,14 +9,14 @@ public class ChessBoard {
     public Stack<Command> undoLog;
 
     public ChessBoard() {
-        this.chess_board =  new char[][] {{'C','H','B','Q','K','B','H','C'},
+        this.chess_board =  new char[][] {{'R','N','B','Q','K','B','N','R'},
                                           {'P','P','P','P','P','P','P','P'},
                                           {' ',' ',' ',' ',' ',' ',' ',' '},
                                           {' ',' ',' ',' ',' ',' ',' ',' '},
                                           {' ',' ',' ',' ',' ',' ',' ',' '},
                                           {' ',' ',' ',' ',' ',' ',' ',' '},
                                           {'p','p','p','p','p','p','p','p'},
-                                          {'c','h','b','q','k','b','h','c'}};
+                                          {'r','n','b','q','k','b','n','r'}};
 
         this.descriptive_moves = false;
         this.undoLog = new Stack<>();
@@ -86,6 +86,18 @@ public class ChessBoard {
         String descriptive = input.nextLine();
 
         game.descriptive_moves = (descriptive.equals("descriptive")) ? true : false;
+
+        if (game.descriptive_moves == false)
+        {
+            System.out.println("To move specify the row an column of the piece you want to move and then the row and column of the destination");
+            System.out.println("Example: move 7 1 8 1");
+        }
+        else
+        {
+            System.out.println("To move first specify th piece you want to move by you using decriptive chess notation for example the pawn in front of your queen is q2. The pawn in front of the bishop on your queens side (queens bishop 2) would be entered qb2.");
+            System.out.println("Then specify how squares youd like to move up of down followed by how many squares you'd like to move left and right");
+            System.out.println("An example command all together would  move QB1 u5r5");
+        }
 
         System.out.println("Let's see our initial board:\n");
 
