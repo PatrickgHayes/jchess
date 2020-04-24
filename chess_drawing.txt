@@ -135,3 +135,5 @@ System.out.println("An example command all together would  move QB1 u5r5");
 
 04/23/20:
 * example place command: place player p qr2
+* finished place
+* TODO ADD UNIT TESTING !*!*!
