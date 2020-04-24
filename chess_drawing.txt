@@ -137,3 +137,7 @@ System.out.println("An example command all together would  move QB1 u5r5");
 * example place command: place player p qr2
 * finished place
 * TODO ADD UNIT TESTING !*!*!
+
+04/24/20:
+* Did first ping between a server and a client
+* looked into unit tests
