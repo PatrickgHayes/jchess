@@ -132,3 +132,6 @@ System.out.println("An example command all together would  move QB1 u5r5");
 * TODO change coordinate form to be r1c1 r1c2
 * Today we finished descriptive moves
 * TODO descriptive places
+
+04/23/20:
+* example place command: place player p qr2

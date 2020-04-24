@@ -23,17 +23,12 @@ public class Parser {
                     throw e;
                 }               
             case "place":
-                if (tokens.length != 4) {
-                    throw new Exception("Place requires the following format move" +
-                                        "place piece row col");
-                }
-                char piece = tokens[1].charAt(0);
-                piece = (piece == '_') ? ' ' : piece;
-                int row = Integer.parseInt(tokens[2]) - 1;
-                int col = Integer.parseInt(tokens[3]) - 1;
                 try {
-                    ChessTile tile = new ChessTile(row, col);
-                    return new Place(chessBoard, piece, tile);
+                    if (chessBoard.descriptive_moves == false) {
+                        return parseCoordinatePlaceCommand(tokens, chessBoard);
+                    } else {
+                        return parseDescriptivePlaceCommand(tokens, chessBoard);
+                    }
                 } catch (Exception e) {
                     throw e;
                 }
@@ -67,11 +62,6 @@ public class Parser {
 
     public Command parseDescriptiveMoveCommand(String[] tokens, ChessBoard chessBoard) throws Exception
     {
-        int old_row = 0;
-        int old_col = 0;
-        int new_row = 0;
-        int new_col = 0;
-
         if (tokens.length != 4) {
             throw new Exception("Move requires the following format move" +
                                  " player descriptive_location descriptive_move");
@@ -79,64 +69,56 @@ public class Parser {
         int player = Integer.parseInt(tokens[1]);
         String descriptive_location = tokens[2];
         String descriptive_move = tokens[3];
+        
+        // Get the old row and column
+        ChessTile old_tile = getTileFromDescriptiveLocation(descriptive_location, player);
+        // Get the new row and new column
+        ChessTile new_tile = getTileFromDescriptiveMove(descriptive_move, old_tile);
+        return new Move(chessBoard, old_tile, new_tile);
+    }
+
+    private ChessTile getTileFromDescriptiveMove(String descriptive_move, ChessTile oldTile) throws Exception {
+        int old_row = oldTile.getRow();
+        int old_col = oldTile.getCol();
+        int new_row = -1;
+        int new_col = -1;
+
+        if (descriptive_move.length() == 2)
+        {
+            switch(descriptive_move.charAt(0))
+            {
+                case 'u':
+                    new_row = old_row - Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                    new_col = old_col;
+                    break;
+                case 'd':
+                    new_row = old_row + Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                    new_col = old_col;
+                    break;
+                case 'r':
+                    new_col = old_col + Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                    new_row = old_row;
+                    break;
+                case 'l':
+                    new_col = old_col - Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
+                    new_row = old_row;
+                    break;
+            }
+        }
+        else if (descriptive_move.length() == 3)
+        {
+            new_row = determineMoveRow(descriptive_move.charAt(0), Integer.parseInt(String.valueOf(descriptive_move.charAt(2))), old_row);
+            new_col = determineMoveColumn(descriptive_move.charAt(1), Integer.parseInt(String.valueOf(descriptive_move.charAt(2))), old_col);
+        }
+        else
+        {
+            new_row = determineMoveRow(descriptive_move.charAt(0), Integer.parseInt(String.valueOf(descriptive_move.charAt(1))), old_row);
+            new_col = determineMoveColumn(descriptive_move.charAt(2), Integer.parseInt(String.valueOf(descriptive_move.charAt(3))), old_col);
+        }
         try {
-
-            // Get the old row and old column
-            if (descriptive_location.length() == 2)
-            {
-                old_col = (descriptive_location.charAt(0) == 'Q') ? 4 : 5;
-                int temp_row = Integer.parseInt(String.valueOf(descriptive_location.charAt(1)));
-                old_row = (player == 1) ? temp_row : chessBoard.chess_board_size - temp_row + 1;
-            }
-            else
-            {
-                old_col = determineDescriptiveColumn(descriptive_location.charAt(0), descriptive_location.charAt(1));
-                int temp_row = Integer.parseInt(String.valueOf(descriptive_location.charAt(2)));
-                old_row = (player == 1) ? temp_row : chessBoard.chess_board_size - temp_row + 1;
-            }
-
-            // Get the new row and new column
-            if (descriptive_move.length() == 2)
-            {
-                switch(descriptive_move.charAt(0))
-                {
-                    case 'u':
-                        new_row = old_row - Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
-                        new_col = old_col;
-                        break;
-                    case 'd':
-                        new_row = old_row + Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
-                        new_col = old_col;
-                        break;
-                    case 'r':
-                        new_col = old_col + Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
-                        new_row = old_row;
-                        break;
-                    case 'l':
-                        new_col = old_col - Integer.parseInt(String.valueOf(descriptive_move.charAt(1)));
-                        new_row = old_row;
-                        break;
-                }
-            }
-            else if (descriptive_move.length() == 3)
-            {
-                new_row = determineMoveRow(descriptive_move.charAt(0), Integer.parseInt(String.valueOf(descriptive_move.charAt(2))), old_row);
-                new_col = determineMoveColumn(descriptive_move.charAt(1), Integer.parseInt(String.valueOf(descriptive_move.charAt(2))), old_col);
-            }
-            else
-            {
-                new_row = determineMoveRow(descriptive_move.charAt(0), Integer.parseInt(String.valueOf(descriptive_move.charAt(1))), old_row);
-                new_col = determineMoveColumn(descriptive_move.charAt(2), Integer.parseInt(String.valueOf(descriptive_move.charAt(3))), old_col);
-            }
-
-            System.out.println(new_col);
-            System.out.println(new_row);
-            
-            ChessTile old_tile = new ChessTile(old_row-1, old_col-1);
-            ChessTile new_tile = new ChessTile(new_row-1, new_col-1);
-            return new Move(chessBoard, old_tile, new_tile);
+            return new ChessTile(new_row, new_col);
         } catch (Exception e) {
-            throw e;
+            throw new Exception("Destination " + e);
         }
     }
 
@@ -147,11 +129,11 @@ public class Parser {
             switch(piece)
             {
                 case 'R':
-                    return 1;
+                    return 0;
                 case 'N':
-                    return 2;
+                    return 1;
                 case 'B':
-                    return 3;
+                    return 2;
             }
         }
         else
@@ -159,11 +141,11 @@ public class Parser {
             switch(piece)
             {
                 case 'R':
-                    return 8;
-                case 'N':
                     return 7;
-                case 'B':
+                case 'N':
                     return 6;
+                case 'B':
+                    return 5;
             }
         }
         return 0;
@@ -192,6 +174,60 @@ public class Parser {
                 return old_row + amount;
             default:
                 return 0;
+        }
+    }
+
+    private Place parseCoordinatePlaceCommand(String[] tokens, ChessBoard chessBoard) throws Exception {
+        if (tokens.length != 4) {
+            throw new Exception("Place requires the following format move" +
+                                "place piece row col");
+        }
+        char piece = tokens[1].charAt(0);
+        piece = (piece == '_') ? ' ' : piece;
+        int row = Integer.parseInt(tokens[2]) - 1;
+        int col = Integer.parseInt(tokens[3]) - 1;
+        try {
+            ChessTile tile = new ChessTile(row, col);
+            return new Place(chessBoard, piece, tile);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private Place parseDescriptivePlaceCommand(String[] tokens, ChessBoard chessBoard) throws Exception {
+        if (tokens.length != 4) {
+            throw new Exception("Place requires the following format: place " +
+                                "player piece descriptive_location");
+        }
+
+        int player = Integer.parseInt(tokens[1]);
+        char piece = tokens[2].charAt(0);
+        piece = (piece == '_') ? ' ' : piece;
+        String descriptiveLocation = tokens[3];
+        ChessTile tile = getTileFromDescriptiveLocation(descriptiveLocation, player);
+        return new Place(chessBoard, piece, tile);
+    }
+
+    private ChessTile getTileFromDescriptiveLocation(String descriptive_location, int player) throws Exception {
+        // Get the row and column
+        int col;
+        int row;
+        if (descriptive_location.length() == 2)
+        {
+            col = (descriptive_location.charAt(0) == 'Q') ? 3 : 4;
+            int temp_row = Integer.parseInt(String.valueOf(descriptive_location.charAt(1)));
+            row = (player == 1) ? temp_row - 1 : ChessBoard.chess_board_size - temp_row;
+        }
+        else
+        {
+            col = determineDescriptiveColumn(descriptive_location.charAt(0), descriptive_location.charAt(1));
+            int temp_row = Integer.parseInt(String.valueOf(descriptive_location.charAt(2)));
+            row = (player == 1) ? temp_row - 1 : ChessBoard.chess_board_size - temp_row;
+        }
+        try {
+            return new ChessTile(row, col);
+        } catch (Exception e) {
+            throw new Exception("Starting Location " + e);
         }
     }
 }
