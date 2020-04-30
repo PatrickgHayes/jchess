@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerMain
+public class Server
 {
 	public static void main(String[] args) {
     	int port = 8001;
@@ -19,23 +19,28 @@ public class ServerMain
 
             while (true) {
                 Socket socket = serverSocket.accept();
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 if (player1.equals(""))
                 {
                 	player1 = socket.getRemoteSocketAddress().toString();
                 	System.out.println("Player 1 Connected");
-                    out.println("Ping: You have been registerd by the server!");
+                    writer.println("Ping: You have been registerd by the server!");
+                    Thread thread = new ClientHandler(socket, reader, writer);
+                    thread.start();
                 }
                 else if (player2.equals(""))
                 {
                 	player2 = socket.getRemoteSocketAddress().toString();
                 	System.out.println("Player 2 Connected");
-                    out.println("Ping: You have been registerd by the server!");
+                    writer.println("Ping: You have been registerd by the server!");
+                    Thread thread = new ClientHandler(socket, reader, writer);
+                    thread.start();
                 }
                 else
                 {
                 	System.out.println("Both players are already regiestered. Not registering third player.");
-                    out.println("Error: Two players are already playing. Come back another time!");
+                    writer.println("Error: Two players are already playing. Come back another time!");
                 }
             }
         } catch (IOException ex) {

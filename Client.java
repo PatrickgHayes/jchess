@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.net.UnknownHostException;
 import java.io.IOException;
 
-public class ClientMain
+public class Client
 {
 	public static void main(String[] args) {
 
