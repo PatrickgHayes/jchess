@@ -13,6 +13,7 @@ public class Server
     	int port = 8001;
     	String player1 = "";
     	String player2 = "";
+        ChessBoard chess_board = new ChessBoard();
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server is listening on port " + port);
@@ -26,7 +27,7 @@ public class Server
                 	player1 = socket.getRemoteSocketAddress().toString();
                 	System.out.println("Player 1 Connected");
                     writer.println("Ping: You have been registerd by the server!");
-                    Thread thread = new ClientHandler(socket, reader, writer);
+                    Thread thread = new ClientHandler(socket, reader, writer, chess_board);
                     thread.start();
                 }
                 else if (player2.equals(""))
@@ -34,7 +35,7 @@ public class Server
                 	player2 = socket.getRemoteSocketAddress().toString();
                 	System.out.println("Player 2 Connected");
                     writer.println("Ping: You have been registerd by the server!");
-                    Thread thread = new ClientHandler(socket, reader, writer);
+                    Thread thread = new ClientHandler(socket, reader, writer, chess_board);
                     thread.start();
                 }
                 else
