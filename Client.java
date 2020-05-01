@@ -12,6 +12,8 @@ public class Client
 {
 	public static void main(String[] args) {
 
+        int playerNum = Integer.parseInt(args[0]);
+
         String hostname = "localhost";
         int port = 8001;
 
@@ -53,21 +55,41 @@ public class Client
             }
 
             System.out.println("Let's see our initial board:\n");
+            game.print();
+            System.out.println();
 
             while (true)
             {
-                game.print();
-                System.out.println();
-
-                System.out.println("Next player, make your move!");
-                String command_text = input.nextLine();
                 try {
-                    writer.println(command_text);
-                    Command command = parser.parse(command_text, game);
-                    System.out.println(command.toString());
-                    command.execute();
-                    // do not use
-                    ///////
+                    if (playerNum == 1) {
+                        System.out.println("Player 1 make your move!");
+                        String command_text = input.nextLine();
+                        writer.println(command_text);
+                        Command command = parser.parse(command_text, game);
+                        command.execute();
+                        game.print();
+                        System.out.println();
+                        System.out.println("Waiting for player 2 to move");
+                        command_text = reader.readLine();
+                        command = parser.parse(command_text, game);
+                        command.execute();
+                        game.print();
+                        System.out.println();
+                    } else {
+                        System.out.println("Waiting for player 1 to move");
+                        String command_text = reader.readLine();
+                        Command command = parser.parse(command_text, game);
+                        command.execute();
+                        game.print();
+                        System.out.println();
+                        System.out.println("Player 2 make your move");
+                        command_text = input.nextLine();
+                        writer.println(command_text);
+                        command = parser.parse(command_text, game);
+                        command.execute();
+                        game.print();
+                        System.out.println();
+                    }
                 } catch(Exception e) {
                     System.out.println(e);
                     System.exit(2);

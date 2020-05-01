@@ -13,12 +13,16 @@ public class ClientHandler extends Thread{
     ChessBoard chess_board;
     Parser parser = new Parser();
     String command_text;
+    Server server;
+    int playerNum;
 
-    public ClientHandler(Socket socket, BufferedReader reader, PrintWriter writer, ChessBoard chess_board) {
+    public ClientHandler(Socket socket, BufferedReader reader, PrintWriter writer, ChessBoard chess_board, Server server, int playerNum) {
         this.socket = socket;
         this.reader = reader;
         this.writer = writer;
         this.chess_board = chess_board;
+        this.server = server;
+        this.playerNum = playerNum;
     }
 
     @Override
@@ -29,6 +33,12 @@ public class ClientHandler extends Thread{
                 System.out.println("Executing command: " + command_text);
                 Command command = parser.parse(command_text, chess_board);
                 command.execute();
+                chess_board.print();
+                if (playerNum == 1) {
+                    server.sendCommandToPlayer2(command_text);
+                } else {
+                    server.sendCommandToPlayer1(command_text);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
