@@ -36,6 +36,8 @@ public class Parser {
                 return new Undo(chessBoard);
             case "checkmate":
                 return new Checkmate();
+            case "endturn":
+                return new EndTurn();
             default:
                 throw new Exception("Not a vaild command");
         }
@@ -43,14 +45,14 @@ public class Parser {
 
     public Command parseCoordinateMoveCommand(String[] tokens, ChessBoard chessBoard) throws Exception
     {
-        if (tokens.length != 5) {
+        if (tokens.length != 3) {
             throw new Exception("Move requires the following format move" +
-                                 " old_row old_col new_row new_col");
+                                 " r(old_row)c(old_col) r(new_row)c(new_col)");
         }
-        int old_row = Integer.parseInt(tokens[1]);
-        int old_col = Integer.parseInt(tokens[2]);
-        int new_row = Integer.parseInt(tokens[3]);
-        int new_col = Integer.parseInt(tokens[4]);
+        int old_row = Integer.parseInt(tokens[1].substring(1,2));
+        int old_col = Integer.parseInt(tokens[1].substring(3,4));
+        int new_row = Integer.parseInt(tokens[2].substring(1,2));
+        int new_col = Integer.parseInt(tokens[2].substring(3,4));
         try {
             ChessTile old_tile = new ChessTile(old_row-1, old_col-1);
             ChessTile new_tile = new ChessTile(new_row-1, new_col-1);
@@ -178,14 +180,14 @@ public class Parser {
     }
 
     private Place parseCoordinatePlaceCommand(String[] tokens, ChessBoard chessBoard) throws Exception {
-        if (tokens.length != 4) {
+        if (tokens.length != 3) {
             throw new Exception("Place requires the following format move" +
-                                "place piece row col");
+                                "place piece r(row)c(col)");
         }
         char piece = tokens[1].charAt(0);
         piece = (piece == '_') ? ' ' : piece;
-        int row = Integer.parseInt(tokens[2]) - 1;
-        int col = Integer.parseInt(tokens[3]) - 1;
+        int row = Integer.parseInt(tokens[2].substring(1,2)) - 1;
+        int col = Integer.parseInt(tokens[2].substring(3,4)) - 1;
         try {
             ChessTile tile = new ChessTile(row, col);
             return new Place(chessBoard, piece, tile);

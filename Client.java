@@ -14,6 +14,7 @@ public class Client
 
         int playerNum = Integer.parseInt(args[0]);
 
+        //String hostname = "54.177.179.89";
         String hostname = "localhost";
         int port = 8001;
 
@@ -62,33 +63,58 @@ public class Client
             {
                 try {
                     if (playerNum == 1) {
-                        System.out.println("Player 1 make your move!");
-                        String command_text = input.nextLine();
-                        writer.println(command_text);
-                        Command command = parser.parse(command_text, game);
-                        command.execute();
-                        game.print();
+                        Command command;
+                        do
+                        {
+                            System.out.println("Player 1, make your move!");
+                            String command_text = input.nextLine();
+                            System.out.println();
+                            writer.println(command_text);
+                            command = parser.parse(command_text, game);
+                            command.execute();
+                            game.print();
+                            System.out.println();
+                        }
+                        while ((command instanceof EndTurn) == false);
                         System.out.println();
-                        System.out.println("Waiting for player 2 to move");
-                        command_text = reader.readLine();
-                        command = parser.parse(command_text, game);
-                        command.execute();
-                        game.print();
-                        System.out.println();
+                        do
+                        {
+                            System.out.println("Waiting for player 2 to move");
+                            String command_text = reader.readLine();
+                            System.out.println("Executing command: " + command_text);
+                            System.out.println();
+                            command = parser.parse(command_text, game);
+                            command.execute();
+                            game.print();
+                            System.out.println();
+                        }
+                        while ((command instanceof EndTurn) == false);
                     } else {
-                        System.out.println("Waiting for player 1 to move");
-                        String command_text = reader.readLine();
-                        Command command = parser.parse(command_text, game);
-                        command.execute();
-                        game.print();
-                        System.out.println();
-                        System.out.println("Player 2 make your move");
-                        command_text = input.nextLine();
-                        writer.println(command_text);
-                        command = parser.parse(command_text, game);
-                        command.execute();
-                        game.print();
-                        System.out.println();
+                        Command command;
+                        do
+                        {
+                            System.out.println("Waiting for player 1 to move");
+                            String command_text = reader.readLine();
+                            System.out.println("Executing command: " + command_text);
+                            System.out.println();
+                            command = parser.parse(command_text, game);
+                            command.execute();
+                            game.print();
+                            System.out.println();
+                        }
+                        while ((command instanceof EndTurn) == false);
+                        do
+                        {
+                            System.out.println("Player 2, make your move!");
+                            String command_text = input.nextLine();
+                            System.out.println();
+                            writer.println(command_text);
+                            command = parser.parse(command_text, game);
+                            command.execute();
+                            game.print();
+                            System.out.println();
+                        }
+                        while ((command instanceof EndTurn) == false);
                     }
                 } catch(Exception e) {
                     System.out.println(e);

@@ -31,9 +31,11 @@ public class ClientHandler extends Thread{
             try {
                 command_text = reader.readLine();
                 System.out.println("Executing command: " + command_text);
+                System.out.println();
                 Command command = parser.parse(command_text, chess_board);
                 command.execute();
                 chess_board.print();
+                System.out.println();
                 if (playerNum == 1) {
                     server.sendCommandToPlayer2(command_text);
                 } else {
